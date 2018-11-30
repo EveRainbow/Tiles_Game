@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <style>
+        .inl {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 1px solid #858585;
+            margin: 3px;
+            padding: 3px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        /*.bl {
+            display: block;
+            width: 50px;
+            height: 50px;
+            border: 1px solid grey;
+            margin: 3px;
+            padding: 3px;
+        }*/
+
+        * {
+            font-family: cursive;
+        }
+
+        .inl p {
+            text-align: center;
+        }
+
+        .visible {
+            display: block;
+            /*transition-delay: 3000ms;
+            transition: 600ms;*/
+        }
+
+        .notVisible {
+            display: none;
+            /*transition: 600ms;*/
+        }
+
+        .inactive {
+            background-color: grey;
+        }
+
+        .gameField {
+            width: 1200px;
+            margin: 100px auto;
+            background: #484848;
+            height: 694px;
+        }
+
+        .gameBoard {
+            width: 60%;
+            height: 100%;
+            padding: 80px 40px;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        #blockholder {
+            padding: 60px;
+            /*background: #858585;*/
+            margin: auto;
+            width: 260px;
+            border-radius: 5px;
+        }
+
+        .rightBoard {
+            width: 25%;
+            background: #8a8a8a;
+            height: 694px;
+            float: right;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .newGameBtn {
+            padding: 10px 30px;
+            color: white;
+            background: #f4976c;
+            border: 1px solid white;
+            font-size: 16px;
+            border-radius: 5px;
+            display: block;
+            margin: 30px auto;
+            cursor: pointer;
+        }
+
+        .rightBoard select {
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            padding: 5px;
+            width: 140px;
+            border-radius: 5px;
+        }
+
+        .dropdown {
+            cursor: pointer;
+        }
+
+        .dropdown .menuItem {
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            padding: 5px;
+            width: 140px;
+            border-radius: 5px;
+            height: 33px;
+            box-sizing: border-box;
+        }
+
+        .dropdown .boardColorsList {
+            display: none;
+            z-index: 1;
+            margin: auto;
+        }
+        .dropdown:hover .boardColorsList {
+            display: block;
+        }
+
+        .rightBoard select option {
+            text-align: center;
+        }
+
+        .rightBoard p {
+            color: white;
+        }
+
+        .scoreBoard {
+            width: 15%;
+            background: #cbcbcb;
+            height: 694px;
+            float: right;
+            padding: 20px;
+            box-sizing: border-box;
+            color: white;
+            overflow: auto;
+        }
+
+        ::-webkit-scrollbar {
+            -webkit-appearance: none;
+        }
+
+        ::-webkit-scrollbar:vertical {
+            width: 9px;
+        }
+
+        ::-webkit-scrollbar:horizontal {
+            height: 9px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, .5);
+            border-radius: 10px;
+            border: 2px solid #ffffff;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #b19a6e;
+        }
+
+        .inGame {
+            cursor: pointer;
+        }
+
+        .boardColor_1 {
+            background: #70e1f5;
+            background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);
+            background: linear-gradient(to right, #ffd194, #70e1f5);
+        }
+
+        .boardColor_2 {
+            background: #BBD2C5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #292E49, #536976, #BBD2C5);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #292E49, #536976, #BBD2C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }   
+
+        .boardColor_3 {
+            background: #114357;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #F29492, #114357);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #F29492, #114357); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
+
+        /*.inactive p.visible {
+            display: none;
+        }*/
+    </style>
+</head>
+
+<body>
+    <div class="gameField">
+        <div class="gameBoard boardColor_1">
+            <div id="blockholder">
+            </div>
+        </div>
+        <div class="rightBoard">
+            <p>Choose a board size</p>
+            <select name="" id="boardSize">
+                <option value="4">4x4</option>
+                <option value="6">6x6</option>
+            </select>
+            <button class="newGameBtn" onclick="newGame()">New game</button>
+            <hr/>
+            <p>Choose Board Color</p>
+            <div class="dropdown">
+                <div class="menuItem boardColor_1">
+                </div>
+                <div class="boardColorsList">
+                    <div class="menuItem boardColor_1"></div>
+                    <div class="menuItem boardColor_2"></div>
+                    <div class="menuItem boardColor_3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="scoreBoard">
+            <p style="font-size: 18px;">Score History</p>
+        </div>
+    </div>
+    <script>
+        var blocks = [{
+                image: 1
+            },
+            {
+                image: 1
+            },
+            {
+                image: 2
+            },
+            {
+                image: 2
+            },
+            {
+                image: 3
+            },
+            {
+                image: 3
+            },
+            {
+                image: 4
+            },
+            {
+                image: 4
+            },
+            {
+                image: 5
+            },
+            {
+                image: 5
+            },
+            {
+                image: 6
+            },
+            {
+                image: 6
+            },
+            {
+                image: 7
+            },
+            {
+                image: 7
+            },
+            {
+                image: 8
+            },
+            {
+                image: 8
+            },
+            {
+                image: 9
+            },
+            {
+                image: 9
+            },
+            {
+                image: 10
+            },
+            {
+                image: 10
+            },
+            {
+                image: 11
+            },
+            {
+                image: 11
+            },
+            {
+                image: 12
+            },
+            {
+                image: 12
+            },
+            {
+                image: 13
+            },
+            {
+                image: 13
+            },
+            {
+                image: 14
+            },
+            {
+                image: 14
+            },
+            {
+                image: 15
+            },
+            {
+                image: 15
+            },
+            {
+                image: 16
+            },
+            {
+                image: 16
+            },
+            {
+                image: 17
+            },
+            {
+                image: 17
+            },
+            {
+                image: 18
+            },
+            {
+                image: 18
+            }
+        ]
+
+        var boardSizePrev = $('#boardSize').val();
+
+        function newGame() {
+
+            $('#blockholder').html('');
+            var boardSize = $('#boardSize').val();
+            if (boardSizePrev != boardSize) {
+                $('.scoreBoard p.singleScore').remove();
+            }
+            var ln = blocks.length;
+            for (let i = 0; i < ln; i++) {
+                blocks[i].randomNum = function () {
+                    let ran = Math.floor((Math.random() * 100) + 1);
+                    return ran
+                }
+            }
+            blocks.sort(function (a, b) {
+                return a.randomNum() - b.randomNum();
+            });
+
+            if (boardSize === '0' || boardSize === '4') {
+                $('#blockholder').css('width', '260px');
+                var nextStartPoint = 0;
+                for (let i = 0; i < 16; i++) {
+                    if (((i % 4 === 0) & (i != 1)) || (i === 0)) {
+                        var classForBlock = "bl";
+                        var rowOfBlocks = `<div class="rowOfBlocks"></div>`
+                        $(rowOfBlocks).appendTo($('#blockholder'));
+
+                        var b = nextStartPoint != 0 ? nextStartPoint : 0;
+                        var countForRow = 0;
+                        for (b; b < ln; b++) {
+                            if (blocks[b].image < 9 && countForRow < 4) {
+                                let itemBlock =
+                                    `<div class="inGame inl ${blocks[b].randomNum()}"><div style="display: table; margin: auto;"><p class="notVisible">${blocks[b].image}</p></div></div>`;
+
+                                $(itemBlock).appendTo($('.rowOfBlocks:last'));
+
+                                nextStartPoint = b + 1;
+                                countForRow++
+
+                                console.log('i   ' + i);
+                                console.log('nextStartPoint   ' + nextStartPoint);
+                                console.log(`image ${blocks[b].image}`);
+                            }
+
+                            console.log('b   ' + b);
+                            console.log('*********************************');
+
+                        }
+                        console.log(blocks[0].randomNum());
+                    }
+                }
+            } else if (boardSize === '6') {
+                $('#blockholder').css('width', '390px');
+                var nextStartPoint = 0;
+                for (let i = 0; i < 36; i++) {
+                    if (((i % 6 === 0) & (i != 1)) || (i === 0)) {
+                        var classForBlock = "bl";
+                        var rowOfBlocks = `<div class="rowOfBlocks"></div>`
+                        $(rowOfBlocks).appendTo($('#blockholder'));
+
+                        var b = nextStartPoint != 0 ? nextStartPoint : 0;
+                        var countForRow = 0;
+                        for (b; b < ln; b++) {
+                            if (blocks[b].image < 19 && countForRow < 6) {
+                                let itemBlock =
+                                    `<div class="inGame inl ${blocks[b].randomNum()}"><div style="display: table; margin: auto;"><p class="notVisible">${blocks[b].image}</p></div></div>`;
+
+                                $(itemBlock).appendTo($('.rowOfBlocks:last'));
+
+                                nextStartPoint = b + 1;
+                                countForRow++
+
+                                console.log('i   ' + i);
+                                console.log('nextStartPoint   ' + nextStartPoint);
+                                console.log(`image ${blocks[b].image}`);
+                            }
+
+                            console.log('b   ' + b);
+                            console.log('*********************************');
+
+                        }
+                        console.log(blocks[0].randomNum());
+
+                    }
+
+                }
+            }
+
+            var countClicks = 0;
+            var check;
+            var checkLength;
+
+            $('.inGame').on('click', function (e) {
+                countClicks++
+                console.log('hasClass inGame  ' + $(this).hasClass('inGame'))
+
+                $(this).find('p').toggleClass('visible notVisible');
+
+                check = $('#blockholder').find($('p.visible'));
+                checkLength = check.length;
+
+
+                console.log("checkLength   " + checkLength);
+                /*if (!$(this).hasClass('inGame')) {
+                    return
+                }*/
+                if ((checkLength === 2) && ($(check[0]).text() === $(check[1]).text())) {
+                    for (let i = 0; i < 2; i++) {
+                        //$(check[i]).toggleClass('visible notVisible');
+                    }
+                    /*$(document).trigger('paired');
+                    console.log('paired is triggered');*/
+                    $('p[class="visible"]').parents(".inGame").removeClass("inGame").addClass("inactive");
+
+                    function notInGame() {
+                        $('p.visible').remove();
+                        for (let i = 0; i < 2; i++) {
+                            //$(check[i]).toggleClass('visible notVisible');
+                            //$(check[i]).remove();
+                        }
+                        console.log('paired');
+                    }
+                    notInGame();
+
+                    var ifInGame = $('#blockholder').find($('.inGame'));
+                    var lengthInGame = ifInGame.length;
+
+                    if (lengthInGame === 0) {
+                        $('#blockholder').html(
+                            `<div style="margin: 30px auto 0 auto; text-align: center;"><p style="font-size: 25px; color: white;">Кликов<br>${countClicks}</p><button class="newGameBtn" onclick="newGame()">New game</button></div>`
+                        );
+                        //let newHistory = `<p>${countClicks}</p>`;
+                        $('.scoreBoard').append(`<p class="singleScore">${countClicks}</p>`);
+                        //countClicks = 0;
+                        console.log('countClicks  ' + countClicks);
+                    }
+                    //} else if ((checkLength === 3) && ($(check[0]).text() != $(check[1]).text())) {
+                } else if (checkLength === 3) {
+                    check = $('#blockholder').find($('p.visible'));
+                    checkLength = check.length;
+                    console.log('from else if check  ' + check + '  length  ' + checkLength);
+
+                    for (let i = 0; i < 3; i++) {
+                        $(check[i]).toggleClass('visible notVisible');
+                        $(this).find('p').toggleClass('visible notVisible');
+                    }
+                }
+                console.log(check[0]);
+                console.log(check);
+            })
+        }
+
+        newGame();
+
+        console.log($('.inGame p[class]'));
+
+        //$('.inl p[class]').on('change', () => console.log('class have been changed'))
+
+        console.log($('#blockholder').find($('p.visible')))
+    </script>
+</body>
+
+</html>
