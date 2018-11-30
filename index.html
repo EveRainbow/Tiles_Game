@@ -55,7 +55,6 @@
         .gameField {
             width: 1200px;
             margin: 100px auto;
-            background: #484848;
             height: 694px;
         }
 
@@ -65,6 +64,7 @@
             padding: 80px 40px;
             display: inline-block;
             box-sizing: border-box;
+            border-radius: 8px;
         }
 
         #blockholder {
@@ -77,6 +77,7 @@
 
         .rightBoard {
             width: 25%;
+            border-radius: 8px;
             background: #8a8a8a;
             height: 694px;
             float: right;
@@ -147,6 +148,7 @@
             box-sizing: border-box;
             color: white;
             overflow: auto;
+            border-radius: 8px;
         }
 
         ::-webkit-scrollbar {
@@ -193,6 +195,24 @@
             background: linear-gradient(to right, #F29492, #114357); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         }
 
+        .boardColor_4 {
+            background: #12c2e9;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #f64f59, #c471ed, #12c2e9);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #f64f59, #c471ed, #12c2e9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
+        .boardColor_5 {
+            background: #ee9ca7;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #ffdde1, #ee9ca7);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #ffdde1, #ee9ca7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
+        .boardColor_6 {
+            background: #a8c0ff;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #3f2b96, #a8c0ff);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #3f2b96, #a8c0ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+
 
         /*.inactive p.visible {
             display: none;
@@ -216,12 +236,15 @@
             <hr/>
             <p>Choose Board Color</p>
             <div class="dropdown">
-                <div class="menuItem boardColor_1">
+                <div class="menuItem main_menuItem boardColor_1">
                 </div>
                 <div class="boardColorsList">
-                    <div class="menuItem boardColor_1"></div>
-                    <div class="menuItem boardColor_2"></div>
-                    <div class="menuItem boardColor_3"></div>
+                    <div class="menuItem boardColor_1" background="boardColor_1"></div>
+                    <div class="menuItem boardColor_2" background="boardColor_2"></div>
+                    <div class="menuItem boardColor_3" background="boardColor_3"></div>
+                    <div class="menuItem boardColor_4" background="boardColor_4"></div>
+                    <div class="menuItem boardColor_5" background="boardColor_5"></div>
+                    <div class="menuItem boardColor_6" background="boardColor_6"></div>
                 </div>
             </div>
         </div>
@@ -501,6 +524,14 @@
         //$('.inl p[class]').on('change', () => console.log('class have been changed'))
 
         console.log($('#blockholder').find($('p.visible')))
+
+        $(".boardColorsList .menuItem").on('click', function (e) {
+            $('.gameBoard, .main_menuItem').removeClass (function (index, className) {
+                return (className.match (/\bboardColor\S+/g) || []).join(' ');
+            }).addClass($(this).attr('background'));
+           // $('.gameBoard').addClass($(this).attr('background'));
+            console.log($(this) + 'this click');
+        })
     </script>
 </body>
 
